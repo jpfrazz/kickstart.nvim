@@ -155,7 +155,10 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+vim.opt.scrolloff = 15
+
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -189,6 +192,10 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- centers cursor
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Center cursor after jumping down' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Center cursor after jumping up' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -229,17 +236,6 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
 
-  -- file viewer
-  {
-    'stevearc/oil.nvim',
-    opts = {},
-    -- Optional dependencies
-    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
-    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
-    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
-    lazy = false,
-  },
-
   -- allows connecting to ssh or docker
   {
     'amitds1997/remote-nvim.nvim',
@@ -254,6 +250,24 @@ require('lazy').setup({
     offline_mode = {
       enabled = true,
       no_github = false,
+    },
+  },
+
+  -- workspace plugin
+  {
+    'natecraddock/workspaces.nvim',
+    opts = {
+      path = vim.fn.stdpath 'config' .. '/workspaces',
+      sort = true,
+      mru_sort = true,
+      auto_open = true,
+      auto_dir = false,
+      notify_info = true,
+      hooks = {
+        add = {},
+        remove = {},
+        open = {},
+      },
     },
   },
 
@@ -639,7 +653,7 @@ require('lazy').setup({
         basedpyright = {},
         -- gopls = {},
         -- pyright = {},
-        -- rust_analyzer = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
